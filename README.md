@@ -1,5 +1,13 @@
-# EcoIdentify
-## Official Artificial Intelligence Source Code Developed By EcoClim Solutions co. 
-### Purpose of code is to provide a real time solution to address the issue of improper recycling due to detection issues
+---
+title: Ecoidentify
+emoji: 🏃
+colorFrom: yellow
+colorTo: gray
+sdk: gradio
+sdk_version: 4.12.0
+app_file: app.py
+pinned: false
+license: mit
+---
 
-<h1> Support us at buymeacoffee.com/ecoclim </h1>
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
