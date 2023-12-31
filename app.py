@@ -62,10 +62,6 @@ try:
             # Load the weights from the temporary file
             model.load_weights("temp_weights.h5")
 
-            # Optionally, remove the temporary file
-            import os
-            os.remove("temp_weights.h5")
-
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
 except Exception as e:
