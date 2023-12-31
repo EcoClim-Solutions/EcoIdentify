@@ -52,12 +52,19 @@ try:
 
             model = model_arc()
 
-            # imported the requests library
             image_url = "https://drive.google.com/file/d/1jc_gp8qR8t6e8z8WOA_K-SqfurN7Z8vn/view?usp=sharing"
-            # URL of the image to be downloaded is defined as image_url
-            r = requests.get(image_url) # create HTTP response object
+            r = requests.get(image_url)
 
-            model.load_weights(r)
+            # Save the content of the response to a temporary file
+            with open("temp_weights.h5", "wb") as f:
+                f.write(r.content)
+
+            # Load the weights from the temporary file
+            model.load_weights("temp_weights.h5")
+
+            # Optionally, remove the temporary file
+            import os
+            os.remove("temp_weights.h5")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
