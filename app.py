@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 import urllib.request
 from utils import *
+import requests
 
 labels = gen_labels()
 
@@ -51,8 +52,7 @@ try:
 
             model = model_arc()
 
-                        # imported the requests library
-            import requests
+            # imported the requests library
             image_url = "https://drive.google.com/file/d/1jc_gp8qR8t6e8z8WOA_K-SqfurN7Z8vn/view?usp=sharing"
             # URL of the image to be downloaded is defined as image_url
             r = requests.get(image_url) # create HTTP response object
