@@ -50,7 +50,7 @@ try:
             img = preprocess(image)
 
             model = model_arc()
-            model.load_weights("https://dl.dropboxusercontent.com/scl/fi/uss7jgn63bfmz9p47y3es/classify_model.h5?rlkey=metmtzv4tmnntl63upgu0px25")
+            model.load_weights("classify_model.h5")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
