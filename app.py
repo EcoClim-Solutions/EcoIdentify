@@ -32,12 +32,12 @@ image = None  # Initialize image variable
 if opt == 'Upload image from device':
     file = st.file_uploader('Select', type=['jpg', 'png', 'jpeg'])
     if file is not None:
-        image = Image.open(file).resize((300, 300), Image.LANCZOS)
+        image = Image.open(file).resize((256, 256), Image.LANCZOS)
 
 elif opt == 'Upload image via link':
     try:
         img = st.text_input('Enter the Image Address')
-        image = Image.open(urllib.request.urlopen(img)).resize((300, 300), Image.LANCZOS)
+        image = Image.open(urllib.request.urlopen(img)).resize((256, 256), Image.LANCZOS)
     except:
         if st.button('Submit'):
             show = st.error("Please Enter a valid Image Address!")
@@ -46,7 +46,7 @@ elif opt == 'Upload image via link':
 
 try:
     if image is not None:
-        st.image(image, width=300, caption='Uploaded Image')
+        st.image(image, width=256, caption='Uploaded Image')
         if st.button('Predict'):
             img = preprocess(image)
 
