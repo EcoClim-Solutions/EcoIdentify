@@ -78,7 +78,7 @@ if image is not None:
     if st.button("Predict"):
         with st.spinner("Predicting..."):
             img = preprocess(image)
-            prediction = model.predict(image)
+            prediction = model.predict(img)
             print(f"Debug - Predictions: {prediction}")
 
         
