@@ -31,7 +31,7 @@ opt = st.selectbox("How do you want to upload the image for classification?\n", 
 
 image = None  # Initialize image variable
 
-urlforinstall = 'https://drive.google.com/uc?id=14Np9eWghHqLK-Kwxq8pPTdFLPa9Cm_fp'
+urlforinstall = 'https://drive.google.com/file/d/1HFWfZDxvLbM6CjqpgtO6HkFt5_GK5hjX/view?usp=sharing'
 outputforinstall = 'EcoIdentify_model.h5'
 
 gdown.download(urlforinstall, outputforinstall, quiet=False)
