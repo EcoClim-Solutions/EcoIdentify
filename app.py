@@ -60,9 +60,8 @@ try:
             with open("temp_weights.h5", "wb") as f:
                 f.write(r.content)
 
-            # The code that I gave you to fix the error
             model.build(input_shape = (None, 256, 256, 3)) # replace with your input shape
-            model.load_weights("temp_weights.h5")
+            model.load_weights("config.json")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
