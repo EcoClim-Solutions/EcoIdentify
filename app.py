@@ -31,8 +31,8 @@ opt = st.selectbox("How do you want to upload the image for classification?\n", 
 
 image = None  # Initialize image variable
 
-urlforinstall = 'https://drive.google.com/file/d/1HFWfZDxvLbM6CjqpgtO6HkFt5_GK5hjX/view?usp=sharing'
-outputforinstall = 'EcoIdentify_model.h5'
+urlforinstall = 'https://drive.google.com/file/d/14Np9eWghHqLK-Kwxq8pPTdFLPa9Cm_fp/view?usp=drive_link'
+outputforinstall = 'EcoIdentify_modellink.h5'
 
 gdown.download(urlforinstall, outputforinstall, quiet=False)
 
@@ -59,7 +59,7 @@ try:
             img = preprocess(image)
 
             model = model_arc()
-            model.load_weights("EcoIdentify_model.h5")
+            model.load_weights("EcoIdentify_modellink.h5")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
