@@ -5,3 +5,6 @@ def model_download():
     outputforinstall = 'EcoIdentify_modellink.h5'
 
     gdown.download(urlforinstall, outputforinstall, quiet=False)
+
+    # Return the path where the model is saved
+    return outputforinstall
