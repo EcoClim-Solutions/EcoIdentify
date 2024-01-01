@@ -1,13 +1,9 @@
-# Your enhanced app code
 import time
 import streamlit as st
 import numpy as np
 from PIL import Image
 import urllib.request
-from utils import *
-import gdown
-import requests
-import tensorflow as tf
+from utils import preprocess, model_arc
 
 # Set page title and favicon
 st.set_page_config(page_title="Garbage Segregation App", page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png")
@@ -17,8 +13,8 @@ st.markdown(
     """
     <style>
         body {
-            color: #1E1E1E;
-            background-color: #F8F8F8;
+            color: #FFFFFF;
+            background-color: #3498db;
         }
         .st-bb {
             padding: 0rem;
@@ -51,8 +47,7 @@ opt = st.selectbox(
 
 # Initialize variables
 image = None
-model = None
-labels = gen_labels()
+labels = ['cardboard', 'glass', 'paper', 'plastic', 'metal', 'trash']
 
 # Upload image based on user selection
 if opt == "Upload image from device":
@@ -71,40 +66,28 @@ elif opt == "Upload image via link":
             show.empty()
 
 # Display uploaded image
-# Display uploaded image
-# Display uploaded image
 if image is not None:
     st.image(image, width=256, caption="Uploaded Image")
 
-    # Predict button
     # Predict button
     if st.button("Predict"):
         with st.spinner("Predicting..."):
             img = preprocess(image)
             model = model_arc()
             prediction = model.predict(img)
-            print(f"Debug - Predictions: {prediction}")
 
         # Display top prediction
         top_class = np.argmax(prediction[0])
         confidence = prediction[0][top_class]
-        user_response = st.text_input(f"Is it {labels[top_class]}? Enter 'yes' or 'no'")
-        
-        if user_response.lower() == 'yes':
-            st.success(f"Prediction: {labels[top_class]} with confidence {confidence:.2%}")
-        elif user_response.lower() == 'no':
-            # Provide an additional prediction
-            second_prediction_idx = np.argsort(prediction[0])[::-1][1]
-            second_confidence = prediction[0][second_prediction_idx]
-            st.warning(f"First Prediction: {labels[top_class]} with confidence {confidence:.2%}")
-            st.warning(f"Second Prediction: {labels[second_prediction_idx]} with confidence {second_confidence:.2%}")
-        else:
-            st.warning("Please enter 'yes' or 'no' to confirm the prediction.")
 
+        # Provide an additional prediction
+        second_prediction_idx = np.argsort(prediction[0])[::-1][1]
+        second_confidence = prediction[0][second_prediction_idx]
+        st.success(f"Prediction: {labels[top_class]} with confidence {confidence:.2%}")
+        st.warning(f"Alternative Prediction: {labels[second_prediction_idx]} with confidence {second_confidence:.2%}")
 
 # Clear Button
 if st.button("Clear"):
     image = None
     st.image(image, width=256, caption="Uploaded Image")
     st.warning("Image cleared. Upload a new image for prediction.")
-
