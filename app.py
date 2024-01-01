@@ -79,7 +79,8 @@ if image is not None:
         with st.spinner("Predicting..."):
             img = preprocess(image)
             model = model_arc()
-            prediction = model.predict(np.expand_dims(img, axis=0))
+            prediction = model.predict(img)
+
 
         # Display top predictions
         top_n = 3  # Display top 3 predictions

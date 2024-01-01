@@ -25,7 +25,7 @@ def preprocess(image):
     image = np.array(image.resize((256, 256), Image.LANCZOS))
     image = np.array(image, dtype='uint8')
     image = np.array(image) / 255.0
-
+    image = np.expand_dims(image, axis=0)  # Add an extra dimension for batch size
     return image
 
 data_augmentation = tf.keras.Sequential([
