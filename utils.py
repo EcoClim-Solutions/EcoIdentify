@@ -42,18 +42,5 @@ base_model = tf.keras.applications.ResNet50V2(include_top=False, input_shape=inp
 base_model.trainable = True
 
 def model_arc():
-    model = tf.keras.Sequential([
-        data_augmentation,
-        base_model,
-        tf.keras.layers.GlobalAveragePooling2D(),
-        tf.keras.layers.Dense(6, activation='softmax')
-    ])
-
-    learning_rate = 0.00001
-    model.compile(
-        loss='sparse_categorical_crossentropy',
-        optimizer=tf.keras.optimizers.Adam(learning_rate),
-        metrics=['accuracy']
-    )
-
+    model = 'EcoIdentify_modellink.h5'
     return model
