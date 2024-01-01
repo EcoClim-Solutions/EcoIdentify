@@ -26,27 +26,33 @@ def preprocess(image):
 
     return image
 
+data_augmentation = tf.keras.Sequential([
+    tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset= -1),
+    tf.keras.layers.experimental.preprocessing.RandomFlip("horizontal_and_vertical"),
+    tf.keras.layers.experimental.preprocessing.RandomRotation(0.2),
+    tf.keras.layers.experimental.preprocessing.RandomZoom(0.2)
+], name='data_augmentation')
+
+#Instantiating the base model
+input_shape = (256,256,3)
+base_model = tf.keras.applications.ResNet50V2(include_top=False, input_shape=input_shape)
+
+#Making the layers of the model trainable
+base_model.trainable = True
+
 def model_arc():
-    model = Sequential()
+    model = tf.keras.Sequential([
+        data_augmentation,
+        base_model,
+        tf.keras.layers.GlobalAveragePooling2D(),
+        tf.keras.layers.Dense(6, activation='softmax')
+    ])
 
-    # Convolution blocks
-    model.add(Conv2D(32, kernel_size=(3,3), padding='same', input_shape=(300,300,3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=2)) 
-
-    model.add(Conv2D(64, kernel_size=(3,3), padding='same', activation='relu'))
-    model.add(MaxPooling2D(pool_size=2)) 
-
-    model.add(Conv2D(32, kernel_size=(3,3), padding='same', activation='relu'))
-    model.add(MaxPooling2D(pool_size=2)) 
-
-    # Classification layers
-    model.add(Flatten())
-
-    model.add(Dense(64, activation='relu'))
-    model.add(Dropout(0.2))
-    model.add(Dense(32, activation='relu'))
-
-    model.add(Dropout(0.2))
-    model.add(Dense(6, activation='softmax'))
+    learning_rate = 0.00001
+    model.compile(
+        loss='sparse_categorical_crossentropy',
+        optimizer=tf.keras.optimizers.Adam(learning_rate),
+        metrics=['accuracy']
+    )
 
     return model
