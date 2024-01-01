@@ -4,6 +4,9 @@ import numpy as np
 from PIL import Image
 import urllib.request
 from utils import preprocess, model_arc
+import gdown
+import requests
+import tensorflow as tf
 
 # Set page title and favicon
 st.set_page_config(page_title="Garbage Segregation App", page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png")
