@@ -10,7 +10,7 @@ import requests
 import tensorflow as tf
 
 # Set page title and favicon
-st.set_page_config(page_title="Garbage Segregation App", page_icon="🗑️")
+st.set_page_config(page_title="Garbage Segregation App", page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png")
 
 # Set style for the app
 st.markdown(
