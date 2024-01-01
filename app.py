@@ -83,8 +83,12 @@ if image is not None:
 
         
         # Display top prediction
-        topclass = max(prediction)
+        topclass = np.argmax(prediction)
+
+        # Make sure top_class is an integer
         top_class = int(topclass)
+
+
         confidence = prediction[0][top_class]
 
         # Provide an additional prediction
