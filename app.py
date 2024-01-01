@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 import urllib.request
 from utils import *
+import gdown
 import requests
 
 labels = gen_labels()
@@ -30,6 +31,12 @@ opt = st.selectbox("How do you want to upload the image for classification?\n", 
 
 image = None  # Initialize image variable
 
+urlforinstall = 'https://drive.google.com/uc?id=14Np9eWghHqLK-Kwxq8pPTdFLPa9Cm_fp'
+outputforinstall = 'EcoIdentify_model.h5'
+
+gdown.download(urlforinstall, outputforinstall, quiet=False)
+
+
 if opt == 'Upload image from device':
     file = st.file_uploader('Select', type=['jpg', 'png', 'jpeg'])
     if file is not None:
@@ -52,16 +59,7 @@ try:
             img = preprocess(image)
 
             model = model_arc()
-
-            image_url = "https://drive.google.com/file/d/1jc_gp8qR8t6e8z8WOA_K-SqfurN7Z8vn/view?usp=sharing"
-            r = requests.get(image_url)
-
-            # Save the content of the response to a temporary file
-            with open("temp_weights.h5", "wb") as f:
-                f.write(r.content)
-
-            model.build(input_shape = (None, 256, 256, 3)) # replace with your input shape
-            model.load_weights("classify_model.h5")
+            model.load_weights("EcoIdentify_model.h5")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
