@@ -42,5 +42,5 @@ base_model = tf.keras.applications.ResNet50V2(include_top=False, input_shape=inp
 base_model.trainable = True
 
 def model_arc():
-    model = 'EcoIdentify_modellink.h5'
+    model = model = tf.keras.models.load_model('EcoIdentify_modellink.h5')
     return model
