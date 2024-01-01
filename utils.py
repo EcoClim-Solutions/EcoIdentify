@@ -6,6 +6,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from PIL import Image
 import tensorflow as tf
+from Downloading_model import *
 
 def gen_labels():
     train = 'Dataset/Train'
@@ -42,5 +43,6 @@ base_model = tf.keras.applications.ResNet50V2(include_top=False, input_shape=inp
 base_model.trainable = True
 
 def model_arc():
+    model_download()
     model = model = tf.keras.models.load_model('EcoIdentify_modellink.h5')
     return model
