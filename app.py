@@ -61,7 +61,7 @@ try:
                 f.write(r.content)
 
             model.build(input_shape = (None, 256, 256, 3)) # replace with your input shape
-            model.load_weights("config.json")
+            model.load_weights("classify_model.h5")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
