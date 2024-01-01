@@ -72,15 +72,18 @@ elif opt == "Upload image via link":
 
 # Display uploaded image
 # Display uploaded image
+# Display uploaded image
 if image is not None:
     st.image(image, width=256, caption="Uploaded Image")
 
+    # Predict button
     # Predict button
     if st.button("Predict"):
         with st.spinner("Predicting..."):
             img = preprocess(image)
             model = model_arc()
             prediction = model.predict(img)
+            print(f"Debug - Predictions: {prediction}")
 
         # Display top prediction
         top_class = np.argmax(prediction[0])
@@ -89,14 +92,19 @@ if image is not None:
         
         if user_response.lower() == 'yes':
             st.success(f"Prediction: {labels[top_class]} with confidence {confidence:.2%}")
-        else:
+        elif user_response.lower() == 'no':
             # Provide an additional prediction
             second_prediction_idx = np.argsort(prediction[0])[::-1][1]
             second_confidence = prediction[0][second_prediction_idx]
             st.warning(f"First Prediction: {labels[top_class]} with confidence {confidence:.2%}")
             st.warning(f"Second Prediction: {labels[second_prediction_idx]} with confidence {second_confidence:.2%}")
+        else:
+            st.warning("Please enter 'yes' or 'no' to confirm the prediction.")
+
 
 # Clear Button
 if st.button("Clear"):
     image = None
     st.image(image, width=256, caption="Uploaded Image")
+    st.warning("Image cleared. Upload a new image for prediction.")
+
