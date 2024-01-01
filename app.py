@@ -80,8 +80,9 @@ if image is not None:
             prediction = model.predict(img)
             print(f"Debug - Predictions: {prediction}")
 
+        
         # Display top prediction
-        top_class = max((value, index) for index, value in enumerate(prediction))
+        top_class = max(prediction)
         confidence = prediction[0][top_class]
 
         # Provide an additional prediction
