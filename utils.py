@@ -44,5 +44,5 @@ base_model.trainable = True
 
 def model_arc():
     model_download()
-    model = tf.keras.models.load_model('EcoIdentify_modellink.h5')
+    model = tf.keras.models.load_model(model_download())
     return model
