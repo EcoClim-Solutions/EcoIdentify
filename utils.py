@@ -5,6 +5,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from PIL import Image
+import tensorflow as tf
 
 def gen_labels():
     train = 'Dataset/Train'
