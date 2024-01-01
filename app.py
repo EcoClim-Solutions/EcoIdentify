@@ -54,7 +54,7 @@ try:
             img = preprocess(image)
 
             model = model_arc()
-            model.load_weights("EcoIdentify_modellink.h5")
+            #model.load_weights("EcoIdentify_modellink.h5")
 
             prediction = model.predict(img)
             st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
