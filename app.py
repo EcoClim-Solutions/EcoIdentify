@@ -81,7 +81,7 @@ if image is not None:
             print(f"Debug - Predictions: {prediction}")
 
         # Display top prediction
-        top_class = np.argmax(prediction[0])
+        top_class = max((value, index) for index, value in enumerate(prediction_tuple))
         confidence = prediction[0][top_class]
 
         # Provide an additional prediction
