@@ -1,4 +1,4 @@
-# Your app code
+# Your enhanced app code
 import time
 import streamlit as st
 import numpy as np
@@ -9,54 +9,84 @@ import gdown
 import requests
 import tensorflow as tf
 
-labels = gen_labels()
+# Set page title and favicon
+st.set_page_config(page_title="Garbage Segregation App", page_icon="🗑️")
 
-html_temp = '''
-    <div style="padding-bottom: 20px; padding-top: 20px; padding-left: 5px; padding-right: 5px">
-    <center><h1>Garbage Segregation</h1></center>
-    </div>
-    '''
+# Set style for the app
+st.markdown(
+    """
+    <style>
+        body {
+            color: #1E1E1E;
+            background-color: #F8F8F8;
+        }
+        .st-bb {
+            padding: 0rem;
+        }
+        .st-ec {
+            color: #6E6E6E;
+        }
+        .st-ef {
+            color: #6E6E6E;
+        }
+        .st-ei {
+            color: #1E1E1E;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-st.markdown(html_temp, unsafe_allow_html=True)
+# Header
+st.title("Garbage Segregation")
 
-html_temp = '''
-    <div>
-    <h2></h2>
-    <center><h3>Please upload Waste Image to find its Category</h3></center>
-    </div>
-    '''
+# Subheader
+st.subheader("Upload an image to classify its waste category")
 
-st.markdown(html_temp, unsafe_allow_html=True)
+# Selectbox for upload option
+opt = st.selectbox(
+    "How do you want to upload the image for classification?",
+    ("Please Select", "Upload image via link", "Upload image from device"),
+)
 
-opt = st.selectbox("How do you want to upload the image for classification?\n", ('Please Select', 'Upload image via link', 'Upload image from device'))
+# Initialize variables
+image = None
+model = None
 
-image = None  # Initialize image variable
-
-if opt == 'Upload image from device':
-    file = st.file_uploader('Select', type=['jpg', 'png', 'jpeg'])
+# Upload image based on user selection
+if opt == "Upload image from device":
+    file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
     if file is not None:
         image = Image.open(file).resize((256, 256), Image.LANCZOS)
 
-elif opt == 'Upload image via link':
+elif opt == "Upload image via link":
     try:
-        img = st.text_input('Enter the Image Address')
+        img = st.text_input("Enter the Image Address")
         image = Image.open(urllib.request.urlopen(img)).resize((256, 256), Image.LANCZOS)
     except:
-        if st.button('Submit'):
+        if st.button("Submit"):
             show = st.error("Please Enter a valid Image Address!")
             time.sleep(4)
             show.empty()
 
-try:
-    if image is not None:
-        st.image(image, width=256, caption='Uploaded Image')
-        if st.button('Predict'):
+# Display uploaded image
+if image is not None:
+    st.image(image, width=256, caption="Uploaded Image")
+
+    # Predict button
+    if st.button("Predict"):
+        with st.spinner("Predicting..."):
             img = preprocess(image)
+            model = load_model()
+            prediction = model.predict(np.expand_dims(img, axis=0))
 
-            model = model_arc()
-            #model.load_weights("EcoIdentify_modellink.h5")
+        # Display top predictions
+        top_n = 3  # Display top 3 predictions
+        top_classes = np.argsort(prediction[0])[::-1][:top_n]
+        for i, class_idx in enumerate(top_classes):
+            st.success(f"Prediction {i+1}: {labels[class_idx]} with confidence {prediction[0][class_idx]:.2%}")
 
-            prediction = model.predict(img)
-            st.info('Hey! The uploaded image has been classified as "{} waste" '.format(labels[np.argmax(prediction)]))
-except Exception as e:
-    st.info(str(e))
+# Clear Button
+if st.button("Clear"):
+    image = None
+    st.image(image, width=256, caption="Uploaded Image")
