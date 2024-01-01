@@ -7,6 +7,7 @@ import urllib.request
 from utils import *
 import gdown
 import requests
+import tensorflow as tf
 
 labels = gen_labels()
 
