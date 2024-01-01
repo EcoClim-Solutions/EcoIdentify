@@ -78,6 +78,7 @@ if image is not None:
             img = preprocess(image)
             model = model_arc()
             prediction = model.predict(img)
+            print(f"Debug - Predictions: {prediction}")
 
         # Display top prediction
         top_class = np.argmax(prediction[0])
