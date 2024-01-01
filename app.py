@@ -8,6 +8,8 @@ import gdown
 import requests
 import tensorflow as tf
 
+model = model_arc()
+
 # Set page title and favicon
 st.set_page_config(page_title="Garbage Segregation App", page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png")
 
@@ -76,13 +78,13 @@ if image is not None:
     if st.button("Predict"):
         with st.spinner("Predicting..."):
             img = preprocess(image)
-            model = model_arc()
             prediction = model.predict(img)
             print(f"Debug - Predictions: {prediction}")
 
         
         # Display top prediction
-        top_class = max(prediction)
+        topclass = max(prediction)
+        top_class = int(topclass)
         confidence = prediction[0][top_class]
 
         # Provide an additional prediction
