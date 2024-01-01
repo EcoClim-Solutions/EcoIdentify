@@ -52,7 +52,7 @@ opt = st.selectbox(
 # Initialize variables
 image = None
 model = None
-labels = ['cardboard', 'glass', 'paper', 'plastic', 'metal', 'trash']
+labels = gen_labels()
 
 # Upload image based on user selection
 if opt == "Upload image from device":
