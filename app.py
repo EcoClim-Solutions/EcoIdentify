@@ -71,6 +71,7 @@ elif opt == "Upload image via link":
             show.empty()
 
 # Display uploaded image
+# Display uploaded image
 if image is not None:
     st.image(image, width=256, caption="Uploaded Image")
 
@@ -81,12 +82,19 @@ if image is not None:
             model = model_arc()
             prediction = model.predict(img)
 
-
-        # Display top predictions
-        top_n = 3  # Display top 3 predictions
-        top_classes = np.argsort(prediction[0])[::-1][:top_n]
-        for i, class_idx in enumerate(top_classes):
-            st.success(f"Prediction {i+1}: {labels[class_idx]} with confidence {prediction[0][class_idx]:.2%}")
+        # Display top prediction
+        top_class = np.argmax(prediction[0])
+        confidence = prediction[0][top_class]
+        user_response = st.text_input(f"Is it {labels[top_class]}? Enter 'yes' or 'no'")
+        
+        if user_response.lower() == 'yes':
+            st.success(f"Prediction: {labels[top_class]} with confidence {confidence:.2%}")
+        else:
+            # Provide an additional prediction
+            second_prediction_idx = np.argsort(prediction[0])[::-1][1]
+            second_confidence = prediction[0][second_prediction_idx]
+            st.warning(f"First Prediction: {labels[top_class]} with confidence {confidence:.2%}")
+            st.warning(f"Second Prediction: {labels[second_prediction_idx]} with confidence {second_confidence:.2%}")
 
 # Clear Button
 if st.button("Clear"):
