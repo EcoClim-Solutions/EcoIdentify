@@ -77,7 +77,7 @@ if image is not None:
     if st.button("Predict"):
         with st.spinner("Predicting..."):
             img = preprocess(image)
-            model = load_model()
+            model = model_arc()
             prediction = model.predict(np.expand_dims(img, axis=0))
 
         # Display top predictions
