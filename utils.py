@@ -65,11 +65,7 @@ def to_device(data, device):
     return data.to(device, non_blocking=True)
 
 def get_default_device():
-    """Pick GPU if available, else CPU"""
-    if torch.cuda.is_available():
-        return torch.device('cuda')
-    else:
-        return torch.device('cpu')
+    return torch.device('cpu')
     
 device = get_default_device()
 device
