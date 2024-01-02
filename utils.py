@@ -64,9 +64,15 @@ def to_device(data, device):
         return [to_device(x, device) for x in data]
     return data.to(device, non_blocking=True)
 
-
+def get_default_device():
+    """Pick GPU if available, else CPU"""
+    if torch.cuda.is_available():
+        return torch.device('cuda')
+    else:
+        return torch.device('cpu')
     
-device = None
+device = get_default_device()
+device
 
 def to_device(data, device):
     """Move tensor(s) to chosen device"""
