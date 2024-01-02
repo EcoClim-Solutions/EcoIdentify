@@ -13,6 +13,7 @@ import gdown
 import matplotlib.pyplot as plt
 from torchvision.datasets import ImageFolder
 import torchvision.transforms as transforms
+import shape
 
 transformations = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
 dataset = ImageFolder('Dataset', transform = transformations)
@@ -52,9 +53,13 @@ def predict_image(img, model):
     # Convert to a batch of 1
     xb = to_device(img.unsqueeze(0), device)
     # Get predictions from model
+# Get predictions from model
     yb = model(xb)
-    # Pick index with highest probability
-    prob, preds  = torch.max(yb, dim=1)
+    # Pick index with the highest probability
+    prob, preds = torch.max(yb, dim=1)
+    # Retrieve the class label
+    return dataset.classes[preds[0].item()]
+
     # Retrieve the class label
     return dataset.classes[preds[0].item()]
 
