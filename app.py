@@ -84,17 +84,26 @@ if image is not None:
 
         
         # Display top prediction
-        topclass = np.argmax(prediction)
+        prediction = np.array(prediction)
+
+        # Find the index of the maximum element
+        top_class = np.argmax(prediction)
 
         # Make sure top_class is an integer
-        top_class = int(topclass)
+        top_class = int(top_class)
 
-
+        # Get the confidence corresponding to the maximum element
         confidence = prediction[0][top_class]
 
-        # Provide an additional prediction
+        # Print the result
+        print(f"Top Class (Index): {top_class}")
+        print(f"Confidence: {confidence}")
+
+        # Assuming you have calculated the second_prediction_idx and second_confidence
         second_prediction_idx = np.argsort(prediction[0])[::-1][1]
         second_confidence = prediction[0][second_prediction_idx]
+
+        # Display results using Streamlit components
         st.success(f"Prediction: {labels[top_class]} with confidence {confidence:.2%}")
         st.warning(f"Alternative Prediction: {labels[second_prediction_idx]} with confidence {second_confidence:.2%}")
 
