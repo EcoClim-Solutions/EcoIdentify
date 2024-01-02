@@ -6,7 +6,8 @@ import urllib.request
 from utils import preprocess, model_arc
 
 # Load the model
-model = model_arc()
+model_path = model_download()
+model = tf.keras.models.load_model(model_path)
 
 # Set Streamlit page configuration
 st.set_page_config(
