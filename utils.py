@@ -3,11 +3,10 @@ import numpy as np
 from PIL import Image
 import torch
 from Downloading_model import model_download
-
-#Preprocessing Images
-from PIL import Image
-import numpy as np
 from io import BytesIO
+
+
+
 
 def preprocess(file):
     # Convert UploadedFile to PIL Image
