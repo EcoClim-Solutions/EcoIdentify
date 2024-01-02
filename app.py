@@ -6,12 +6,8 @@ import urllib.request
 import tensorflow as tf
 from utils import preprocess, model_arc
 
-dV = True
+model = model_arc()
 
-while dV == True:
-    model = model_arc()
-    dV = False
-    break
 
 # Set Streamlit page configuration
 st.set_page_config(
