@@ -8,7 +8,6 @@ from utils import preprocess, model_arc
 
 model = model_arc()
 
-
 # Set Streamlit page configuration
 st.set_page_config(
     page_title="Garbage Segregation App",
