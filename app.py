@@ -50,6 +50,7 @@ opt = st.selectbox(
 )
 
 image = None
+prediction = None
 
 if opt == "Upload image from device":
     file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
