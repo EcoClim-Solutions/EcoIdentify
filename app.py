@@ -56,8 +56,8 @@ def take_photo():
 
 captured_photo = take_photo()
     
-if captured_photo:
-    st.success('Photo captured successfully!')
-    classification_result, confidence = classify_garbage(captured_photo, model)
-    st.write(f"The item in the photo is: **{classification_result}**")
-    st.write(f"Confidence: **{confidence:.2f}%**")
+
+st.success('Photo captured successfully!')
+classification_result, confidence = classify_garbage(captured_photo, model)
+st.write(f"The item in the photo is: **{classification_result}**")
+st.write(f"Confidence: **{confidence:.2f}%**")
