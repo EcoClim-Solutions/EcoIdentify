@@ -6,7 +6,7 @@ from io import BytesIO
 import gdown
 
 # Download the model
-model_path = 'https://www.dropbox.com/scl/fi/fzhpuhrqviqzbrcyvplyo/EcoIdentify_official_classification_model.h5?rlkey=bc9rm4e4fdfv7pxqxundiyxfp&dl=0'  # Replace with the actual URL
+model_path = "https://onedrive.live.com/download?resid=657A29EC827C9C58%21107&authkey=!APDOTvOiL9qk5wc"  # Replace with the actual URL
 output_path = 'EcoIdentify_official_classification_model.h5'
 gdown.download(model_path, output_path, quiet=False)
 
