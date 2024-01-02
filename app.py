@@ -4,9 +4,20 @@ import numpy as np
 from PIL import Image
 import urllib.request
 import tensorflow as tf
-from utils import preprocess, model_arc
+from utils import preprocess, model_arc, predict_image
+from pathlib import Path
+import gdown
+import matplotlib.pyplot as plt
+from torchvision.datasets import ImageFolder
+import torchvision.transforms as transforms
 
-model = model_arc()
+
+transformations = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
+
+urlforinstall = 'https://www.dropbox.com/scl/fi/8lxjfo0ebfd7kgb0sito6/EcoIdentify_official_classification_model.h5?rlkey=35jdpwthtr4fbfehz02abozf5&dl=1'
+outputforinstall = 'EcoIdentify_official_classification_model.h5'
+gdown.download(urlforinstall, outputforinstall, quiet=False)
+model = tf.keras.models.load_model('EcoIdentify_official_classification_model.h5')
 
 # Set Streamlit page configuration
 st.set_page_config(
@@ -74,26 +85,12 @@ if image:
 
     if st.button("Predict"):
         with st.spinner("Predicting..."):
-            img = preprocess(image)
-            model = model_arc()
-            prediction = model.predict(img)
-            print(f"Debug - Predictions: {prediction}")
+            example_image = transformations(image)
+            plt.imshow(example_image.permute(1, 2, 0))
+            st.success("The image resembles", predict_image(example_image, model) + ".")
         
 
-        for i in range(len(prediction)):
-            st.write(f"{labels[i]} - {prediction[i]}")
-
-        top_class_idx = np.argmax(prediction)
-        top_class = labels[top_class_idx]
-        confidence = prediction[0][top_class_idx]
-
-        sorted_indices = np.argsort(prediction[0])[::-1]
-        second_class_idx = sorted_indices[1]
-        second_confidence = prediction[0][second_class_idx]
-
-        st.success(f"Prediction: {max_value} with confidence {confidence:.2%}")
-        st.warning(f"Alternative Prediction: {labels[second_class_idx]} with confidence {second_confidence:.2%}")
-
+        
 if st.button("Clear"):
     image = None
     st.warning("Image cleared. Upload a new image for prediction.")

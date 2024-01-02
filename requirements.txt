@@ -3,3 +3,6 @@ tensorflow>=2.0
 numpy
 Pillow>=8.0.0
 gdown
+pathlib
+torchvision
+matplotlib
