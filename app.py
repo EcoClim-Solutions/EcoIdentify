@@ -80,9 +80,8 @@ if image:
             print(f"Debug - Predictions: {prediction}")
         
 
-        predictions_list = [prediction[0], prediction[1], prediction[2], prediction[3], prediction[4], prediction[5]]
-        max_value = max(predictions_list)
-        print("The greatest value among the predictions is:", max_value)
+        for i in range(len(prediction)):
+            st.write(f"{labels[i]} - {prediction[i]}")
 
         top_class_idx = np.argmax(prediction)
         top_class = labels[top_class_idx]
