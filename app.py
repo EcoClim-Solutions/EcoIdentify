@@ -1,16 +1,15 @@
-import time
 import streamlit as st
-import numpy as np
+from utils import predict
+from Downloading_model import main
+import tensorflow as tf
 from PIL import Image
 import urllib.request
-import tensorflow as tf
-from utils import preprocess, model_download
 
 
 # Set Streamlit page configuration
 st.set_page_config(
     page_title="Garbage Segregation App",
-    page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png"
+    page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png",
 )
 
 # Define class labels
@@ -68,20 +67,15 @@ if image:
 
     if st.button("Predict"):
         with st.spinner("Predicting..."):
-            img_array = preprocess(image)
-            prediction = model.predict(img_array)
-        
-        top_class_idx = np.argmax(prediction)
-        top_class = labels[top_class_idx]
-        confidence = prediction[0][top_class_idx]
-
-        sorted_indices = np.argsort(prediction[0])[::-1]
-        second_class_idx = sorted_indices[1]
-        second_confidence = prediction[0][second_class_idx]
+            top_class, confidence = predict(image)
 
         st.success(f"Prediction: {top_class} with confidence {confidence:.2%}")
-        st.warning(f"Alternative Prediction: {labels[second_class_idx]} with confidence {second_confidence:.2%}")
 
 if st.button("Clear"):
     image = None
-    st.warning("Image cleared. Upload a new image for prediction.")
+    st.info("Image cleared. Upload a new image for prediction.")
+
+
+# Load the model only once
+model_path = main()
+model = tf.keras.models.load_model(model_path)

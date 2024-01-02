@@ -1,10 +1,7 @@
-import gdown
+from utils import model_download
+import tensorflow as tf
 
-def model_download():
-    urlforinstall = 'https://www.dropbox.com/scl/fi/8lxjfo0ebfd7kgb0sito6/EcoIdentify_official_classification_model.h5?rlkey=35jdpwthtr4fbfehz02abozf5&dl=1'
-    outputforinstall = 'EcoIdentify_official_classification_model.h5'
-
-    gdown.download(urlforinstall, outputforinstall, quiet=False)
-
-    # Return the path where the model is saved
-    return outputforinstall
+def main():
+    model_path = model_download()
+    model = tf.keras.models.load_model(model_path)
+    return model_path
