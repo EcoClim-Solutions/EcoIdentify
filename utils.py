@@ -5,17 +5,26 @@ import torch
 from Downloading_model import model_download
 
 #Preprocessing Images
-def preprocess(image):
+from PIL import Image
+import numpy as np
+from io import BytesIO
+
+def preprocess(file):
+    # Convert UploadedFile to PIL Image
+    image = Image.open(file)
+
     # Resize the image
     image = image.resize((256, 256), Image.LANCZOS)
-    
-    # Convert the image to a NumPy array and scale its values to [0, 1]
-    image_array = np.array(image, dtype=np.float32) / 255.0
-    
-    # Add an extra dimension for batch size
-    image_array = np.expand_dims(image_array, axis=0)
-    
+
+    # Convert the PIL Image to a NumPy array
+    image_array = np.array(image)
+
+    # Normalize pixel values to be between 0 and 1
+    image_array = image_array / 255.0
+
+    # Return the processed image
     return image_array
+
 
 def get_default_device():
     if torch.cuda.is_available():
