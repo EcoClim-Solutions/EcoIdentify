@@ -13,6 +13,8 @@ model = model_arc()
 # Set page title and favicon
 st.set_page_config(page_title="Garbage Segregation App", page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png")
 
+labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
+
 # Set style for the app
 st.markdown(
     """
@@ -52,7 +54,6 @@ opt = st.selectbox(
 
 # Initialize variables
 image = None
-labels = gen_labels()
 prediction = None
 
 # Upload image based on user selection
