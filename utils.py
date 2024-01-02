@@ -33,18 +33,14 @@ def get_default_device():
 
 
 def predict_image(img, model, labels):
-    # Convert NumPy array to PyTorch tensor
-    xb = torch.from_numpy(img).unsqueeze(0)
-
-    # Assuming 'model' is your PyTorch model
-    model.eval()
+    
+    imag = preprocess(img)  # Apply preprocessing specific to ResNet50
 
     # Make the prediction
-    with torch.no_grad():
-        preds = model(xb)
+    preds = model.predict(imag)
 
     # Process the prediction
-    class_idx = torch.argmax(preds[0]).item()
+    class_idx = preds.argmax(axis=-1)[0]
     class_label = labels[class_idx]
     prediction_shape = preds.shape
 
