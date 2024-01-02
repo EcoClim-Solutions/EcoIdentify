@@ -3,7 +3,8 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 import urllib.request
-from utils import preprocess, model_arc
+import tensorflow as tf
+from utils import preprocess, model_download
 
 
 # Set Streamlit page configuration
@@ -48,7 +49,6 @@ opt = st.selectbox(
 )
 
 image = None
-prediction = None
 
 if opt == "Upload image from device":
     file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
@@ -75,11 +75,12 @@ if image:
         top_class = labels[top_class_idx]
         confidence = prediction[0][top_class_idx]
 
-        second_prediction_idx = np.argsort(prediction[0])[::-1][1]
-        second_confidence = prediction[0][second_prediction_idx]
+        sorted_indices = np.argsort(prediction[0])[::-1]
+        second_class_idx = sorted_indices[1]
+        second_confidence = prediction[0][second_class_idx]
 
         st.success(f"Prediction: {top_class} with confidence {confidence:.2%}")
-        st.warning(f"Alternative Prediction: {labels[second_prediction_idx]} with confidence {second_confidence:.2%}")
+        st.warning(f"Alternative Prediction: {labels[second_class_idx]} with confidence {second_confidence:.2%}")
 
 if st.button("Clear"):
     image = None
