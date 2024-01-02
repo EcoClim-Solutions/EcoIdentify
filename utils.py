@@ -7,39 +7,23 @@ labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 model = model_download("https://onedrive.live.com/download?resid=657A29EC827C9C58%21107&authkey=!APDOTvOiL9qk5wc")
 
 
-def preprocess(input_data):
-    if isinstance(input_data, np.ndarray):
-        # If input is a NumPy array, directly use it
-        image = Image.fromarray((input_data * 255).astype(np.uint8))
-    else:
-        # If input is a file (e.g., uploaded file), open it
-        image = Image.open(input_data)
+def preprocess_image(img_path):
+    img = Image.open(img_path)
+    img = img.resize((256, 256))
+    img_array = np.array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
 
-    # Resize the image
-    image = image.resize((256, 256), Image.LANCZOS)
+# Function to classify the garbage
+def classify_garbage(img_path, model):
+    processed_img = preprocess_image(img_path)
+    prediction = model.predict(processed_img)
 
-    # Convert the PIL Image to a NumPy array
-    image_array = np.array(image)
+    class_labels = ["cardboard", "glass", "metal", "paper", "plastic", "trash"]
+    predicted_class = np.argmax(prediction, axis=1)[0]
+    classification_result = class_labels[predicted_class]
 
-    # Normalize pixel values to be between 0 and 1
-    image_array = image_array / 255.0
+    # Get the confidence (probability) of the predicted class
+    confidence = prediction[0][predicted_class] * 100  # Convert probability to percentage
 
-    # Return the processed image
-    return image_array
-
-def predict_image(image):
-    # Preprocess the image
-    processed_image = preprocess(image)
-
-    # Convert the processed image to a PyTorch tensor
-    xb = torch.from_numpy(processed_image).unsqueeze(0)
-
-    # Make the prediction
-    preds = model(xb)
-
-    # Process the prediction
-    class_idx = torch.argmax(preds[0]).item()
-    class_label = labels[class_idx]
-    prediction_shape = preds.shape.tolist()  # Convert PyTorch size to list
-
-    return class_label, prediction_shape
+    return classification_result, confidence

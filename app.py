@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 import urllib.request
-from utils import preprocess, predict_image
+from utils import preprocess_image, classify_garbage
 from Downloading_model import model_download
 
 
@@ -51,21 +51,32 @@ opt = st.selectbox(
 if opt == "Upload image from device":
     file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
     if file:
-        processed_image = preprocess(file)
+        processed_image = preprocess_image(file)
 
 elif opt == "Upload image via link":
     img_url = st.text_input("Enter the Image Address")
     if st.button("Submit"):
         try:
             file = Image.open(urllib.request.urlopen(img_url))
-            processed_image = preprocess(file)
+            processed_image = preprocess_image(file)
         except:
             st.error("Please Enter a valid Image Address!")
 
 
 if st.button("Predict"):
     with st.spinner("Predicting..."):
-        class_label, prediction_shape = predict_image(processed_image)
+        classification_result, confidence = classify_garbage(preprocess_image, model)
 
         # Display the results
-        print(f"The image resembles {class_label}. Prediction shape: {prediction_shape}.")
+        st.success(f"The item in the photo is: {classification_result}")
+        st.success(f"Confidence: {confidence:.2f}%")
+
+
+
+
+
+
+
+
+        
+    
