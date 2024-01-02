@@ -1,16 +1,14 @@
-#Imports
-import numpy as np
 from PIL import Image
+import numpy as np
 import torch
-from Downloading_model import model_download
-from io import BytesIO
 
-
-
-
-def preprocess(file):
-    # Convert UploadedFile to PIL Image
-    image = Image.open(file)
+def preprocess(input_data):
+    if isinstance(input_data, np.ndarray):
+        # If input is a NumPy array, directly use it
+        image = Image.fromarray((input_data * 255).astype(np.uint8))
+    else:
+        # If input is a file (e.g., uploaded file), open it
+        image = Image.open(input_data)
 
     # Resize the image
     image = image.resize((256, 256), Image.LANCZOS)
@@ -24,23 +22,15 @@ def preprocess(file):
     # Return the processed image
     return image_array
 
-
-def get_default_device():
-    if torch.cuda.is_available():
-        return torch.device('cuda')
-    else:
-        return torch.device('cpu')
-
-
 def predict_image(img, model, labels):
-    
-    imag = preprocess(img)  # Apply preprocessing specific to ResNet50
+    # Convert NumPy array to PyTorch tensor
+    xb = torch.from_numpy(img).unsqueeze(0)
 
     # Make the prediction
-    preds = model.predict(imag)
+    preds = model(xb)
 
     # Process the prediction
-    class_idx = preds.argmax(axis=-1)[0]
+    class_idx = torch.argmax(preds[0]).item()
     class_label = labels[class_idx]
     prediction_shape = preds.shape
 
