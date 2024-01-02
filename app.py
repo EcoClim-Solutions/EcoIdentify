@@ -51,6 +51,10 @@ opt = st.selectbox(
 
 image = None
 
+
+
+
+
 if opt == "Upload image from device":
     file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
     if file:
@@ -74,6 +78,35 @@ if image:
             prediction = model.predict(img)
             print(f"Debug - Predictions: {prediction}")
         
+            if prediction[0]>prediction[1]:
+                variable1=True
+                print("cardboard is bigger than glass")
+                big1 = prediction[0]
+            else:
+                variable1=False
+                print("glass is bigger than cardboard")
+                big1 = prediction[1]
+            if prediction[2]>prediction[3]:
+                variable2=True
+                print("metal is greater than paper")
+                big2 = prediction[2]
+            else:
+                variable1=False
+                print("paper is greater than metal")
+                big2 = prediction[3]
+            if prediction[4]>prediction[5]:
+                variable3=True
+                print("Paper is greater than plastic")
+                big3 = prediction[4]                
+            else:
+                variable3=False
+                big3 = prediction[5]
+                print("Plastic is greater than paper")
+
+        predictions_list = [prediction[0], prediction[1], prediction[2], prediction[3], prediction[4], prediction[5]]
+        max_value = max(predictions_list)
+        print("The greatest value among the predictions is:", max_value)
+
         top_class_idx = np.argmax(prediction)
         top_class = labels[top_class_idx]
         confidence = prediction[0][top_class_idx]
@@ -82,7 +115,7 @@ if image:
         second_class_idx = sorted_indices[1]
         second_confidence = prediction[0][second_class_idx]
 
-        st.success(f"Prediction: {top_class} with confidence {confidence:.2%}")
+        st.success(f"Prediction: {max_value} with confidence {confidence:.2%}")
         st.warning(f"Alternative Prediction: {labels[second_class_idx]} with confidence {second_confidence:.2%}")
 
 if st.button("Clear"):
