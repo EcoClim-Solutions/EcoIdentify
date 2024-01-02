@@ -5,7 +5,7 @@ from utils import preprocess, predict_image
 from Downloading_model import model_download
 
 
-model = model_download('https://www.dropbox.com/scl/fi/fzhpuhrqviqzbrcyvplyo/EcoIdentify_official_classification_model.h5?rlkey=bc9rm4e4fdfv7pxqxundiyxfp&dl=0')
+model = model_download("https://onedrive.live.com/download?resid=657A29EC827C9C58%21107&authkey=!APDOTvOiL9qk5wc")
 
 # Set Streamlit page configuration
 st.set_page_config(
