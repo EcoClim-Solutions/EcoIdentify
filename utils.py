@@ -1,6 +1,11 @@
 from PIL import Image
 import numpy as np
 import torch
+from Downloading_model import model_download
+
+labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
+model = model_download("https://onedrive.live.com/download?resid=657A29EC827C9C58%21107&authkey=!APDOTvOiL9qk5wc")
+
 
 def preprocess(input_data):
     if isinstance(input_data, np.ndarray):
@@ -22,9 +27,12 @@ def preprocess(input_data):
     # Return the processed image
     return image_array
 
-def predict_image(img, model, labels):
-    # Convert NumPy array to PyTorch tensor
-    xb = torch.from_numpy(img).unsqueeze(0)
+def predict_image(image):
+    # Preprocess the image
+    processed_image = preprocess(image)
+
+    # Convert the processed image to a PyTorch tensor
+    xb = torch.from_numpy(processed_image).unsqueeze(0)
 
     # Make the prediction
     preds = model(xb)
