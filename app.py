@@ -69,8 +69,10 @@ if image:
 
     if st.button("Predict"):
         with st.spinner("Predicting..."):
-            img_array = preprocess(image)
-            prediction = model.predict(img_array)
+            img = preprocess(image)
+            model = model_arc()
+            prediction = model.predict(img)
+            print(f"Debug - Predictions: {prediction}")
         
         top_class_idx = np.argmax(prediction)
         top_class = labels[top_class_idx]
