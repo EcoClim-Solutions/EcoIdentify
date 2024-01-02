@@ -45,20 +45,18 @@ def take_photo():
     if button_pressed:
         st.info("Capturing photo... Please wait.")
         uploaded_file = st.file_uploader("Choose a file", type=["jpg", "jpeg", "png"])
+        
+        captured_photo = take_photo()
+    
+        if captured_photo:
+            st.success('Photo captured successfully!')
+            classification_result, confidence = classify_garbage(captured_photo, model)
+            st.write(f"The item in the photo is: **{classification_result}**")
+            st.write(f"Confidence: **{confidence:.2f}%**")
+
+
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
             st.image(image, caption="Uploaded Photo", use_column_width=True)
             return image
 
-# Capture and classify
-try:
-    captured_photo = take_photo()
-    
-    if captured_photo:
-        st.success('Photo captured successfully!')
-        classification_result, confidence = classify_garbage(captured_photo, model)
-        st.write(f"The item in the photo is: **{classification_result}**")
-        st.write(f"Confidence: **{confidence:.2f}%**")
-
-except Exception as e:
-    st.error(f"An error occurred: {e}")
