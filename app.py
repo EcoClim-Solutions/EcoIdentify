@@ -5,7 +5,7 @@ from utils import preprocess, predict_image
 from Downloading_model import model_download
 
 
-model = model_download('https://www.dropbox.com/scl/fi/8lxjfo0ebfd7kgb0sito6/EcoIdentify_official_classification_model.h5?rlkey=35jdpwthtr4fbfehz02abozf5&dl=1')
+model = model_download('https://www.dropbox.com/scl/fi/fzhpuhrqviqzbrcyvplyo/EcoIdentify_official_classification_model.h5?rlkey=bc9rm4e4fdfv7pxqxundiyxfp&dl=0')
 
 # Set Streamlit page configuration
 st.set_page_config(
@@ -69,21 +69,3 @@ if st.button("Predict"):
 
         # Display the results
         print(f"The image resembles {class_label}. Prediction shape: {prediction_shape}.")
-        
-
-
-
-
-
-
-
-
-
-# Load an image (replace 'your_image_path.jpg' with the actual path)
-image_path = 'your_image_path.jpg'
-image = Image.open(image_path)
-
-# Preprocess the image
-preprocessed_image = preprocess(image)
-
-# Make predictions
