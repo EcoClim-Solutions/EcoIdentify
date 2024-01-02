@@ -31,18 +31,21 @@ def get_default_device():
     else:
         return torch.device('cpu')
 
+
 def predict_image(img, model, labels):
-    # Convert to a batch of 1
-    xb = img.unsqueeze(0)
-    # Get predictions from model
-    yb = model(xb)
-    # Apply softmax to get probabilities
-    probabilities = torch.nn.functional.softmax(yb, dim=1)
-    # Pick index with the highest probability
-    _, preds = torch.max(probabilities, dim=1)
-    
-    # Retrieve the class label, confidence, and probabilities
-    class_label = labels[preds[0].item()]
-    confidence = probabilities[0, preds[0].item()].item()
-    
-    return class_label, confidence, probabilities.tolist()[0]
+    # Convert NumPy array to PyTorch tensor
+    xb = torch.from_numpy(img).unsqueeze(0)
+
+    # Assuming 'model' is your PyTorch model
+    model.eval()
+
+    # Make the prediction
+    with torch.no_grad():
+        preds = model(xb)
+
+    # Process the prediction
+    class_idx = torch.argmax(preds[0]).item()
+    class_label = labels[class_idx]
+    prediction_shape = preds.shape
+
+    return class_label, prediction_shape
