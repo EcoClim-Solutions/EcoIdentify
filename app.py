@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 import urllib.request
 import tensorflow as tf
-from utils import preprocess, model_arc, predict_image
+from utils.py import preprocess, model_arc, predict_image
 from pathlib import Path
 import gdown
 import matplotlib.pyplot as plt
