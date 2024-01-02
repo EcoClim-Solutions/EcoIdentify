@@ -50,6 +50,7 @@ opt = st.selectbox(
 )
 
 image = None
+prediction = None
 
 
 
