@@ -7,3 +7,5 @@ pathlib
 torchvision
 matplotlib
 shape
+keras
+torch

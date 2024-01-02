@@ -1,23 +1,11 @@
-import time
 import streamlit as st
-import numpy as np
 from PIL import Image
 import urllib.request
-import tensorflow as tf
-from utils import preprocess, model_arc, predict_image
-from pathlib import Path
-import gdown
-import matplotlib.pyplot as plt
-from torchvision.datasets import ImageFolder
-import torchvision.transforms as transforms
+from utils import preprocess, predict_image
+from Downloading_model import model_download
 
 
-transformations = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
-
-urlforinstall = 'https://www.dropbox.com/scl/fi/8lxjfo0ebfd7kgb0sito6/EcoIdentify_official_classification_model.h5?rlkey=35jdpwthtr4fbfehz02abozf5&dl=1'
-outputforinstall = 'EcoIdentify_official_classification_model.h5'
-gdown.download(urlforinstall, outputforinstall, quiet=False)
-model = tf.keras.models.load_model('EcoIdentify_official_classification_model.h5')
+model = model_download('https://www.dropbox.com/scl/fi/8lxjfo0ebfd7kgb0sito6/EcoIdentify_official_classification_model.h5?rlkey=35jdpwthtr4fbfehz02abozf5&dl=1')
 
 # Set Streamlit page configuration
 st.set_page_config(
@@ -60,38 +48,42 @@ opt = st.selectbox(
     ("Please Select", "Upload image via link", "Upload image from device"),
 )
 
-image = None
-prediction = None
-
-
-
-
-
 if opt == "Upload image from device":
     file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
     if file:
-        image = Image.open(file).resize((256, 256), Image.LANCZOS)
+        processed_image = preprocess(file)
 
 elif opt == "Upload image via link":
     img_url = st.text_input("Enter the Image Address")
     if st.button("Submit"):
         try:
-            image = Image.open(urllib.request.urlopen(img_url)).resize((256, 256), Image.LANCZOS)
+            file = Image.open(urllib.request.urlopen(img_url))
+            processed_image = preprocess(file)
         except:
             st.error("Please Enter a valid Image Address!")
 
-if image:
-    st.image(image, width=256, caption="Uploaded Image")
 
-    if st.button("Predict"):
-        with st.spinner("Predicting..."):
-            example_image = transformations(image)
-            plt.imshow(example_image.permute(1, 2, 0))
-            st.success("The image resembles", predict_image(example_image, model) + ".")
+if st.button("Predict"):
+    with st.spinner("Predicting..."):
+        class_label, prediction_shape = predict_image(processed_image, model)
+
+        # Display the results
+        print(f"The image resembles {class_label}. Prediction shape: {prediction_shape}.")
         
 
-        
-if st.button("Clear"):
-    image = None
-    st.warning("Image cleared. Upload a new image for prediction.")
 
+
+
+
+
+
+
+
+# Load an image (replace 'your_image_path.jpg' with the actual path)
+image_path = 'your_image_path.jpg'
+image = Image.open(image_path)
+
+# Preprocess the image
+preprocessed_image = preprocess(image)
+
+# Make predictions
