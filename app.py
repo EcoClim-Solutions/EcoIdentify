@@ -4,8 +4,9 @@ import numpy as np
 from PIL import Image
 import urllib.request
 import tensorflow as tf
-from utils import preprocess, model_download
+from utils import preprocess, model_arc
 
+model = model_arc()
 
 # Set Streamlit page configuration
 st.set_page_config(
