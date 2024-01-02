@@ -52,7 +52,7 @@ opt = st.selectbox(
 
 # Initialize variables
 image = None
-labels = ['cardboard', 'glass', 'paper', 'plastic', 'metal', 'trash']
+labels = gen_labels()
 prediction = None
 
 # Upload image based on user selection
