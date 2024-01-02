@@ -65,7 +65,7 @@ elif opt == "Upload image via link":
 
 if st.button("Predict"):
     with st.spinner("Predicting..."):
-        class_label, prediction_shape = predict_image(processed_image, model, labels)
+        class_label, prediction_shape = predict_image(processed_image)
 
         # Display the results
         print(f"The image resembles {class_label}. Prediction shape: {prediction_shape}.")
