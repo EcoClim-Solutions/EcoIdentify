@@ -73,7 +73,7 @@ def get_default_device():
     else:
         return torch.device('cpu')
     
-device = get_default_device()
+"""device = get_default_device()
 device
 
 def to_device(data, device):
@@ -95,4 +95,4 @@ class DeviceDataLoader():
 
     def __len__(self):
         """Number of batches"""
-        return len(self.dl)
+        return len(self.dl)"""
