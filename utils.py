@@ -1,6 +1,5 @@
 from PIL import Image
 import numpy as np
-import torch
 from Downloading_model import model_download
 
 labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']

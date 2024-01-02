@@ -1,82 +1,64 @@
 import streamlit as st
+import tensorflow as tf
+import numpy as np
 from PIL import Image
-import urllib.request
-from utils import preprocess_image, classify_garbage
-from Downloading_model import model_download
+from io import BytesIO
+import gdown
 
+# Download the model
+model_path = 'https://www.dropbox.com/scl/fi/fzhpuhrqviqzbrcyvplyo/EcoIdentify_official_classification_model.h5?rlkey=bc9rm4e4fdfv7pxqxundiyxfp&dl=0'  # Replace with the actual URL
+output_path = 'EcoIdentify_official_classification_model.h5'
+gdown.download(model_path, output_path, quiet=False)
 
-model = model_download("https://onedrive.live.com/download?resid=657A29EC827C9C58%21107&authkey=!APDOTvOiL9qk5wc")
+# Load the model
+model = tf.keras.models.load_model(output_path)
 
-# Set Streamlit page configuration
-st.set_page_config(
-    page_title="Garbage Segregation App",
-    page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png"
-)
+# Function to preprocess the image
+def preprocess_image(img):
+    img = img.resize((256, 256))
+    img_array = np.array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
 
-# Define class labels
-labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
+# Function to classify the garbage
+def classify_garbage(img, model):
+    processed_img = preprocess_image(img)
+    prediction = model.predict(processed_img)
 
-# Set custom styles
-st.markdown(
-    """
-    <style>
-        body {
-            color: #FFFFFF;
-            background-color: #3498db;
-        }
-        .st-bb {
-            padding: 0rem;
-        }
-        .st-ec, .st-ef {
-            color: #6E6E6E;
-        }
-        .st-ei {
-            color: #1E1E1E;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+    class_labels = ["cardboard", "glass", "metal", "paper", "plastic", "trash"]
+    predicted_class = np.argmax(prediction, axis=1)[0]
+    classification_result = class_labels[predicted_class]
 
-# Main application logic
-st.title("Garbage Segregation")
-st.subheader("Upload an image to classify its waste category")
+    # Get the confidence (probability) of the predicted class
+    confidence = prediction[0][predicted_class] * 100  # Convert probability to percentage
 
-# Image upload options
-opt = st.selectbox(
-    "How do you want to upload the image for classification?",
-    ("Please Select", "Upload image via link", "Upload image from device"),
-)
+    return classification_result, confidence
 
-if opt == "Upload image from device":
-    file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
-    if file:
-        processed_image = preprocess_image(file)
+# Streamlit app
+st.title("Garbage Classifier")
 
-elif opt == "Upload image via link":
-    img_url = st.text_input("Enter the Image Address")
-    if st.button("Submit"):
-        try:
-            file = Image.open(urllib.request.urlopen(img_url))
-            processed_image = preprocess_image(file)
-        except:
-            st.error("Please Enter a valid Image Address!")
+# Function to take a photo using the webcam
+def take_photo():
+    st.write("Click the button below to take a photo:")
+    button_pressed = st.button("Capture Photo")
 
+    if button_pressed:
+        st.info("Capturing photo... Please wait.")
+        uploaded_file = st.file_uploader("Choose a file", type=["jpg", "jpeg", "png"])
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Photo", use_column_width=True)
+            return image
 
-if st.button("Predict"):
-    with st.spinner("Predicting..."):
-        classification_result, confidence = classify_garbage(preprocess_image, model)
-
-        # Display the results
-        st.success(f"The item in the photo is: {classification_result}")
-        st.success(f"Confidence: {confidence:.2f}%")
-
-
-
-
-
-
-
-
-        
+# Capture and classify
+try:
+    captured_photo = take_photo()
     
+    if captured_photo:
+        st.success('Photo captured successfully!')
+        classification_result, confidence = classify_garbage(captured_photo, model)
+        st.write(f"The item in the photo is: **{classification_result}**")
+        st.write(f"Confidence: **{confidence:.2f}%**")
+
+except Exception as e:
+    st.error(f"An error occurred: {e}")
