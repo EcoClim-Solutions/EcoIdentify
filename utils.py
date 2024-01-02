@@ -32,6 +32,6 @@ def predict_image(img, model, labels):
     # Process the prediction
     class_idx = torch.argmax(preds[0]).item()
     class_label = labels[class_idx]
-    prediction_shape = preds.shape
+    prediction_shape = preds.shape.tolist()  # Convert PyTorch size to list
 
     return class_label, prediction_shape
