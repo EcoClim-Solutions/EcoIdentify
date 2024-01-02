@@ -53,15 +53,12 @@ def predict_image(img, model):
     # Convert to a batch of 1
     xb = to_device(img.unsqueeze(0), device)
     # Get predictions from model
-# Get predictions from model
     yb = model(xb)
     # Pick index with the highest probability
     prob, preds = torch.max(yb, dim=1)
     # Retrieve the class label
-    return dataset.classes[preds[0].item()]
+    return dataset.classes[preds[0].item()], yb.shape[1:]
 
-    # Retrieve the class label
-    return dataset.classes[preds[0].item()]
 
 def to_device(data, device):
     """Move tensor(s) to chosen device"""
