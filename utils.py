@@ -22,11 +22,16 @@ def gen_labels():
     return labels
 
 def preprocess(image):
-    image = np.array(image.resize((256, 256), Image.LANCZOS))
-    image = np.array(image, dtype='uint8')
-    image = np.array(image) / 255.0
-    image = np.expand_dims(image, axis=0)  # Add an extra dimension for batch size
-    return image
+    # Resize the image
+    image = image.resize((256, 256), Image.LANCZOS)
+    
+    # Convert the image to a NumPy array and scale its values to [0, 1]
+    image_array = np.array(image, dtype=np.float32) / 255.0
+    
+    # Add an extra dimension for batch size
+    image_array = np.expand_dims(image_array, axis=0)
+    
+    return image_array
 
 def model_arc():
     model_path = model_download()
