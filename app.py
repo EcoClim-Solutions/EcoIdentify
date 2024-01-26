@@ -1,71 +1,108 @@
+import numpy as np
 import streamlit as st
 from PIL import Image
-import urllib.request
-from utils import preprocess, predict_image
-from Downloading_model import model_download
+import tensorflow as tf
+from utils import preprocess_image
 
 
-model = model_download("https://onedrive.live.com/download?resid=657A29EC827C9C58%21107&authkey=!APDOTvOiL9qk5wc")
 
-# Set Streamlit page configuration
+# Initialize labels and model
+labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
+model = tf.keras.models.load_model('classify_model.h5')
+
+# Customized Streamlit layout
 st.set_page_config(
-    page_title="Garbage Segregation App",
-    page_icon="https://ecoclimsolutions.files.wordpress.com/2023/11/ecoclim-logo.png"
+    page_title="EcoIdentify by EcoClim Solutions",
+    page_icon="https://ecoclimsolutions.files.wordpress.com/2024/01/rmcai-removebg.png?resize=48%2C48",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-# Define class labels
-labels = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
-
-# Set custom styles
+# Customized Streamlit styles
 st.markdown(
     """
     <style>
         body {
-            color: #FFFFFF;
-            background-color: #3498db;
+            color: #333333;
+            background-color: #f9f9f9;
+            font-family: 'Helvetica', sans-serif;
         }
         .st-bb {
             padding: 0rem;
         }
-        .st-ec, .st-ef {
-            color: #6E6E6E;
+        .st-ec {
+            color: #666666;
+        }
+        .st-ef {
+            color: #666666;
         }
         .st-ei {
-            color: #1E1E1E;
+            color: #333333;
+        }
+        .st-dh {
+            font-size: 36px;
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .st-gf {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .st-gf:hover {
+            background-color: #45a049;
+        }
+        .st-gh {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .st-logo {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
         }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Main application logic
-st.title("Garbage Segregation")
-st.subheader("Upload an image to classify its waste category")
+# Logo
+st.image("https://ecoclimsolutions.files.wordpress.com/2024/01/rmcai-removebg.png?resize=48%2C48")
 
-# Image upload options
-opt = st.selectbox(
-    "How do you want to upload the image for classification?",
-    ("Please Select", "Upload image via link", "Upload image from device"),
-)
+# Page title
+st.title("EcoIdentify by EcoClim Solutions")
 
-if opt == "Upload image from device":
-    file = st.file_uploader("Select", type=["jpg", "png", "jpeg"])
+# Subheader
+st.header("Upload a waste image to find its category")
+
+# Note
+st.markdown("* Please note that our dataset is trained primarily with images that contain a white background.  Therefore, images with white background would produce maximum accuracy *")
+
+# Image upload section
+opt = st.selectbox("How do you want to upload the image for classification?", ("Please Select", "Upload image from device"))
+
+image = None
+
+if opt == 'Upload image from device':
+    file = st.file_uploader('Select', type=['jpg', 'png', 'jpeg'])
     if file:
-        processed_image = preprocess(file)
+        image = preprocess_image(file)
 
-elif opt == "Upload image via link":
-    img_url = st.text_input("Enter the Image Address")
-    if st.button("Submit"):
-        try:
-            file = Image.open(urllib.request.urlopen(img_url))
-            processed_image = preprocess(file)
-        except:
-            st.error("Please Enter a valid Image Address!")
-
-
-if st.button("Predict"):
-    with st.spinner("Predicting..."):
-        class_label, prediction_shape = predict_image(processed_image)
-
-        # Display the results
-        print(f"The image resembles {class_label}. Prediction shape: {prediction_shape}.")
+try:
+    if image is not None:
+        st.image(image, width=256, caption='Uploaded Image')
+        if st.button('Predict'):
+            prediction = model.predict(image[np.newaxis, ...])
+            st.success(f'Prediction: {labels[np.argmax(prediction[0], axis=-1)]}')
+except Exception as e:
+    st.error(f"An error occurred: {e}.  Please contact us EcoClim Solutions at EcoClimSolutions.wordpress.com.")
