@@ -101,7 +101,7 @@ if opt == 'Upload image from device':
 try:
     if image is not None:
         st.image(image, width=256, caption='Uploaded Image')
-        st.write(image_details(image))
+        st.write(image_details(file))
         if st.button('Predict'):
             prediction = model.predict(image[np.newaxis, ...])
             st.success(f'Prediction: {labels[np.argmax(prediction[0], axis=-1)]}')
