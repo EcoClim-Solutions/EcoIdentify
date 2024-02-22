@@ -22,12 +22,14 @@ def classify_garbage(img_path, model):
     confidence = prediction[0][predicted_class] * 100  # Convert probability to percentage
 
     return classification_result, confidence
-
-def image_details(image):
+    
+def image_details(uploaded_file):
+    image = Image.open(uploaded_file)
     details = {
         "Image format": image.format,
         "Image mode": image.mode,
         "Image size": image.size
     }
     return details
+
 
