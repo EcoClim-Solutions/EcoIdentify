@@ -103,9 +103,10 @@ try:
         st.image(image, width=256, caption='Uploaded Image')
         st.write(image_details(file))
         if st.button('Predict'):
-            prediction = model.predict(image[np.newaxis, ...])
-            confidence = np.max(prediction[0]) * 100
-            st.success(f'Prediction: {predicted_class}, Confidence: {confidence:.2f}%')
-            st.success(f'Prediction: {labels[np.argmax(prediction[0], axis=-1)]}')
+        prediction = model.predict(image[np.newaxis, ...])
+        predicted_class = labels[np.argmax(prediction[0], axis=-1)]
+        confidence = np.max(prediction[0]) * 100
+        st.success(f'Prediction: {predicted_class}, Confidence: {confidence:.2f}%')
+
 except Exception as e:
     st.error(f"An error occurred: {e}.  Please contact us EcoClim Solutions at EcoClimSolutions.wordpress.com.")
