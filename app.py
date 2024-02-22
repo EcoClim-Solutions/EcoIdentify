@@ -2,7 +2,7 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 import tensorflow as tf
-from utils import preprocess_image
+from utils import preprocess_image, image_details
 
 
 
@@ -101,6 +101,7 @@ if opt == 'Upload image from device':
 try:
     if image is not None:
         st.image(image, width=256, caption='Uploaded Image')
+        st.write(image_details(image))
         if st.button('Predict'):
             prediction = model.predict(image[np.newaxis, ...])
             st.success(f'Prediction: {labels[np.argmax(prediction[0], axis=-1)]}')
