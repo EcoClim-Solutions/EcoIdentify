@@ -80,7 +80,7 @@ st.markdown(
 st.image("https://ecoclimsolutions.files.wordpress.com/2024/01/rmcai-removebg.png?resize=48%2C48")
 
 # Page title
-st.title("EcoIdentify by EcoClim Solutions")
+st.title("EcoIdentify ")
 
 # Subheader
 st.header("Upload a waste image to find its category")
