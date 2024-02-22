@@ -12,7 +12,7 @@ model = tf.keras.models.load_model('classify_model.h5')
 
 # Customized Streamlit layout
 st.set_page_config(
-    page_title="EcoIdentify by EcoClim Solutions",
+    page_title="EcoIdentify",
     page_icon="https://ecoclimsolutions.files.wordpress.com/2024/01/rmcai-removebg.png?resize=48%2C48",
     layout="wide",
     initial_sidebar_state="expanded",
