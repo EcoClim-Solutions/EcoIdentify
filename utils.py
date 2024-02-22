@@ -25,11 +25,12 @@ def classify_garbage(img_path, model):
     
 def image_details(uploaded_file):
     image = Image.open(uploaded_file)
-    details = {
-        "Image format": image.format,
-        "Image mode": image.mode,
-        "Image size": image.size
-    }
+    details = f"""
+    - **Image Format**: {image.format}
+    - **Image Mode**: {image.mode}
+    - **Image Size**: {image.size[0]} pixels (width) x {image.size[1]} pixels (height)
+    """
     return details
+
 
 
