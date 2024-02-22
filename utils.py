@@ -24,9 +24,11 @@ def classify_garbage(img_path, model):
     return classification_result, confidence
 
 def image_details(img_path):
+    image = Image.open(img_path)
     details = {
-    "Image name": image.name,
-    "Image type": image.type,
-    "Image size": image.size
+        "Image format": image.format,
+        "Image mode": image.mode,
+        "Image size": image.size
     }
     return details
+
